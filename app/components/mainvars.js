@@ -1,0 +1,1 @@
+export var sectionsLinks = ['welcome', 'aboutMe', 'myPortfolio', 'someNews'];
