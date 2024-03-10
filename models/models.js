@@ -35,6 +35,7 @@ const myPortfolioItemSchema = new Schema(
         enDescription: String,
         uaDescription: String,
         plDescription: String,
+        projectURL: String,
         imageURL: String
     },
     {
