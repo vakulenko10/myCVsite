@@ -56,19 +56,17 @@ const myNewsItemSchema = new Schema(
         timestamps: true,
     }
 );
-// const FAQSItemSchema = new Schema(
-//     {
-//         enQuestion: String,
-//         enAnswer: String,
-//         uaQuestion: String,
-//         uaAnswer: String
-//     },
-//     {
-//         timestamps: true,
-//     }
-// );
+const skillsItemSchema = new Schema(
+    {
+        Title: String,
+        imageURL: String
+    },
+    {
+        timestamps: true,
+    }
+);
 
-
+const SkillItem = mongoose.models.SkillItem || mongoose.model('SkillItem', skillsItemSchema);
 const HelloItem = mongoose.models.HelloItem || mongoose.model('HelloItem', helloItemSchema);
 const AboutMeItem = mongoose.models.AboutMeItem || mongoose.model('AboutMeItem', aboutMeItemSchema);
 const MyPortfolioItem = mongoose.models.MyPortfolioItem || mongoose.model('MyPortfolioItem', myPortfolioItemSchema);
@@ -77,5 +75,5 @@ const MyNewsItem = mongoose.models.MyNewsItem || mongoose.model('MyNewsItem', my
 
 
 
-export { HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem };
+export { SkillItem, HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem };
 //here I have to define some more schemas of content and then use them in my code

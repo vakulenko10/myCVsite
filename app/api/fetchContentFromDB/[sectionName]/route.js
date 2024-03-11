@@ -1,13 +1,14 @@
 
   import { NextResponse } from "next/server";
   import connectMongoDB from '@/libs/mongo_db';
-  import { HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem } from '@/models/models';
+  import { HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem, SkillItem } from '@/models/models';
   import mongoose from "mongoose";
   export const sectionToModelMap = {
         'welcome': HelloItem,
         'aboutMe': AboutMeItem,
         'myPortfolio': MyPortfolioItem,
         'someNews': MyNewsItem,
+        'skills': SkillItem
         // 'FAQS': FAQSItem
       };
   // export const sectionList = Object.keys(sectionToModelMap);

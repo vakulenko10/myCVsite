@@ -1,1 +1,1 @@
-export var sectionsLinks = ['welcome', 'aboutMe', 'myPortfolio', 'someNews'];
+export var sectionsLinks = ['welcome', 'aboutMe', 'myPortfolio','skills', 'someNews'];

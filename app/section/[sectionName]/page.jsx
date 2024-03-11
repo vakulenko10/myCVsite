@@ -11,7 +11,7 @@ const Page = ({ params }) => {
   const [contentItems, setContentItems] = useState([]);
   const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(true);
-  const sections = ['welcome', 'aboutMe', 'myPortfolio', 'someNews', 'FAQS'];
+  const sections = ['welcome', 'aboutMe', 'myPortfolio','skills', 'someNews'];
   const {data: session} = useSession(
     {required: true,
   onUnauthenticated(){
