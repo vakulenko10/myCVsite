@@ -31,11 +31,14 @@ const aboutMeItemSchema = new Schema(
 
 const myPortfolioItemSchema = new Schema(
     {
-
+        enTitle: String,
         enDescription: String,
+        uaTitle: String,
         uaDescription: String,
+        plTitle: String,
         plDescription: String,
         projectURL: String,
+        gitHubRepoURL: String,
         imageURL: String
     },
     {

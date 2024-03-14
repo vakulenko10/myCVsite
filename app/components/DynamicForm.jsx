@@ -101,7 +101,7 @@ const DynamicForm = ({ sectionName, initialData}) => {
               name={property}
               value={formData[property] || ''}
               onChange={handleInputChange}
-              required
+              
               className='text-area mt-1 p-2 w-full border rounded-md resize-none'
             ></textarea>
           </div>
