@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Container from './components/Container';
 import { useSession } from 'next-auth/react';
 

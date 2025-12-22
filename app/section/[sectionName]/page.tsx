@@ -17,10 +17,9 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const [contentItems, setContentItems] = useState<SectionItemType[]>([]);
-  const [schema, setSchema] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const sections: SectionName[] = ['welcome', 'aboutMe', 'myPortfolio', 'skills', 'someNews'];
-  const { data: session } = useSession({
+  useSession({
     required: true,
     onUnauthenticated() {
       redirect(`/api/auth/signin?callbackUrl=/section/${params.sectionName}`);
@@ -43,7 +42,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
         console.log('Data:', data);
         console.log('Content:', data.contentItems);
         setContentItems(data.contentItems);
-        setSchema(data.modelProperties);
       } catch (error) {
         console.error('Error loading content: ', error);
       } finally {

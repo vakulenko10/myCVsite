@@ -10,7 +10,7 @@ interface RouteContext {
   };
 }
 
-export async function GET(req: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function GET(_req: NextRequest, { params }: RouteContext): Promise<NextResponse> {
   try {
     console.log('params.sectionName: ', params.sectionName);
     console.log('Starting GET method');
@@ -126,4 +126,3 @@ export async function DELETE(
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
-

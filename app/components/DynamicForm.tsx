@@ -13,7 +13,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sectionName, initialData }) =
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [schema, setSchema] = useState<string[]>([]);
   const [formData, setFormData] = useState<Record<string, unknown>>({});
-  const [successMessage, setSuccessMessage] = useState<string>('');
   const { imageURLFromContext } = useImage();
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sectionName, initialData }) =
         );
 
         if (initialData) {
-          setFormData(initialData);
+          setFormData(initialData as Record<string, unknown>);
           console.log('formData:', formData);
         }
         setIsLoading(false);
@@ -77,7 +76,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ sectionName, initialData }) =
 
       if (response.ok) {
         setFormData({});
-        setSuccessMessage(initialData ? 'Item updated successfully' : 'Item created successfully');
         window.location.href = `/section/${sectionName}`;
       } else {
         initialData

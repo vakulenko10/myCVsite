@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchPhotos } from '@/libs/GetCloudinary';
-import { useImage } from './ImageURLContext';
 import Carousel from './Carousel';
 
 interface CloudinaryPhoto {
@@ -18,7 +17,6 @@ interface GetImagesFromFolderProps {
 const GetImagesFromFolder: React.FC<GetImagesFromFolderProps> = ({ sectionName }) => {
   const [photos, setPhotos] = useState<CloudinaryPhoto[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { setImageURLFromContext } = useImage();
 
   useEffect(() => {
     const fetchData = async (sectionName: string): Promise<void> => {

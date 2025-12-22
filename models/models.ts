@@ -8,7 +8,7 @@ import type {
 } from '@/types';
 
 // HelloItem Schema
-interface HelloItemDocument extends HelloItemType, Document {}
+interface HelloItemDocument extends Omit<HelloItemType, '_id' | 'createdAt' | 'updatedAt'>, Document {}
 
 const helloItemSchema = new Schema<HelloItemDocument>(
   {
@@ -26,7 +26,7 @@ const helloItemSchema = new Schema<HelloItemDocument>(
 );
 
 // AboutMeItem Schema
-interface AboutMeItemDocument extends AboutMeItemType, Document {}
+interface AboutMeItemDocument extends Omit<AboutMeItemType, '_id' | 'createdAt' | 'updatedAt'>, Document {}
 
 const aboutMeItemSchema = new Schema<AboutMeItemDocument>(
   {
@@ -44,7 +44,7 @@ const aboutMeItemSchema = new Schema<AboutMeItemDocument>(
 );
 
 // MyPortfolioItem Schema
-interface MyPortfolioItemDocument extends MyPortfolioItemType, Document {}
+interface MyPortfolioItemDocument extends Omit<MyPortfolioItemType, '_id' | 'createdAt' | 'updatedAt'>, Document {}
 
 const myPortfolioItemSchema = new Schema<MyPortfolioItemDocument>(
   {
@@ -64,7 +64,7 @@ const myPortfolioItemSchema = new Schema<MyPortfolioItemDocument>(
 );
 
 // MyNewsItem Schema
-interface MyNewsItemDocument extends MyNewsItemType, Document {}
+interface MyNewsItemDocument extends Omit<MyNewsItemType, '_id' | 'createdAt' | 'updatedAt'>, Document {}
 
 const myNewsItemSchema = new Schema<MyNewsItemDocument>(
   {
@@ -82,7 +82,7 @@ const myNewsItemSchema = new Schema<MyNewsItemDocument>(
 );
 
 // SkillItem Schema
-interface SkillItemDocument extends SkillItemType, Document {}
+interface SkillItemDocument extends Omit<SkillItemType, '_id' | 'createdAt' | 'updatedAt'>, Document {}
 
 const skillsItemSchema = new Schema<SkillItemDocument>(
   {

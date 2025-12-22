@@ -10,7 +10,7 @@ interface RouteContext {
   };
 }
 
-export async function GET(req: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function GET(_req: NextRequest, { params }: RouteContext): Promise<NextResponse> {
   try {
     const { sectionName, id } = params;
     const modelProperties = getModelProperties(sectionName);
@@ -80,5 +80,4 @@ export async function PUT(request: NextRequest, { params }: RouteContext): Promi
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
-
 

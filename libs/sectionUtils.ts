@@ -1,4 +1,3 @@
-import { Model, Document } from 'mongoose';
 import {
   HelloItem,
   AboutMeItem,
@@ -8,9 +7,7 @@ import {
 } from '@/models/models';
 import type { SectionName } from '@/types';
 
-type SectionModel = Model<Document, unknown, unknown>;
-
-export const sectionToModelMap: Record<SectionName, SectionModel> = {
+export const sectionToModelMap: Record<SectionName, any> = {
   welcome: HelloItem,
   aboutMe: AboutMeItem,
   myPortfolio: MyPortfolioItem,
