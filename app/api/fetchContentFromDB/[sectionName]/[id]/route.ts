@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectMongoDB from '@/libs/mongo_db';
-import { sectionToModelMap, getModelProperties } from '../route';
+import { sectionToModelMap, getModelProperties } from '@/libs/sectionUtils';
 import type { SectionName } from '@/types';
 
 interface RouteContext {

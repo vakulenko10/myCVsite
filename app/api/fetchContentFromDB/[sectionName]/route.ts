@@ -1,29 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectMongoDB from '@/libs/mongo_db';
-import {
-  HelloItem,
-  AboutMeItem,
-  MyPortfolioItem,
-  MyNewsItem,
-  SkillItem,
-} from '@/models/models';
-import mongoose, { Model, Document } from 'mongoose';
+import { sectionToModelMap, getModelProperties } from '@/libs/sectionUtils';
+import mongoose from 'mongoose';
 import type { SectionName } from '@/types';
-
-type SectionModel = Model<Document, unknown, unknown>;
-
-export const sectionToModelMap: Record<SectionName, SectionModel> = {
-  welcome: HelloItem,
-  aboutMe: AboutMeItem,
-  myPortfolio: MyPortfolioItem,
-  someNews: MyNewsItem,
-  skills: SkillItem,
-};
-
-export function getModelProperties(sectionName: SectionName): string[] | null {
-  const model = sectionToModelMap[sectionName];
-  return model ? Object.keys(model.schema.paths) : null;
-}
 
 interface RouteContext {
   params: {
