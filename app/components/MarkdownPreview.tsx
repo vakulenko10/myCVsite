@@ -11,6 +11,8 @@ const MarkdownPreview: React.FC<MarkdownPreviewProps> = ({ content }) => {
   return (
     <div className="markdown-preview max-w-none p-4 border border-gray-300 rounded-md bg-white min-h-[500px] overflow-y-auto">
       <ReactMarkdown
+        rehypePlugins={[]}
+        remarkPlugins={[]}
         components={{
           // Custom styling for markdown elements
           h1: ({ node, ...props }) => (
@@ -42,13 +44,67 @@ const MarkdownPreview: React.FC<MarkdownPreviewProps> = ({ content }) => {
               {...props}
             />
           ),
-          img: ({ node, ...props }) => (
-            <img
-              className="max-w-full h-auto rounded-lg my-4 shadow-md"
-              alt={props.alt || ''}
-              {...props}
-            />
-          ),
+          img: (props: any) => {
+            const src = props.src;
+            const alt = props.alt || '';
+            const title = props.title;
+            
+            if (!src) {
+              return null;
+            }
+            
+            // Try to handle GitHub raw URLs - they sometimes need different format
+            let imageSrc = src;
+            // If it's a GitHub raw URL, try to ensure it's in the correct format
+            if (src.includes('raw.githubusercontent.com')) {
+              // GitHub raw URLs should work, but might need to be accessed differently
+              imageSrc = src;
+            }
+            
+            return (
+              <div className="my-4">
+                <img
+                  src={imageSrc}
+                  alt={alt}
+                  title={title}
+                  className="max-w-full h-auto rounded-lg shadow-md"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  style={{ 
+                    display: 'block', 
+                    maxWidth: '100%', 
+                    height: 'auto',
+                    margin: '1rem 0'
+                  }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    const parent = target.parentElement;
+                    
+                    console.error('Image failed to load:', {
+                      src: imageSrc,
+                      originalSrc: src,
+                      error: 'Network, CORS, or invalid URL',
+                    });
+                    
+                    if (parent && !parent.querySelector('.image-error')) {
+                      const errorDiv = document.createElement('div');
+                      errorDiv.className = 'image-error text-red-500 text-sm my-2 p-2 bg-red-50 rounded border border-red-200';
+                      errorDiv.innerHTML = `
+                        <p class="font-semibold mb-1">⚠️ Failed to load image</p>
+                        <p class="text-xs break-all text-gray-700 mb-1">URL: ${src}</p>
+                        <p class="text-xs text-gray-600">This is usually a CORS issue. Try using an image hosting service like Cloudinary, Imgur, or your own server.</p>
+                      `;
+                      parent.insertBefore(errorDiv, target.nextSibling);
+                    }
+                    // Don't hide the image - show the error instead
+                  }}
+                  onLoad={() => {
+                    console.log('✅ Image loaded successfully:', imageSrc);
+                  }}
+                />
+              </div>
+            );
+          },
           code: ({ node, inline, ...props }: any) => {
             if (inline) {
               return (
