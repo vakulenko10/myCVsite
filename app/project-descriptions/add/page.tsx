@@ -2,13 +2,13 @@
 
 import Container from '@/app/components/Container';
 import MarkdownPreview from '@/app/components/MarkdownPreview';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { redirect, useSearchParams } from 'next/navigation';
 import type { MyPortfolioItemType } from '@/types';
 import { useRouter } from 'next/navigation';
 
-const Page: React.FC = () => {
+const AddProjectDescriptionForm: React.FC = () => {
   const [portfolioItems, setPortfolioItems] = useState<MyPortfolioItemType[]>([]);
   const [selectedPortfolioId, setSelectedPortfolioId] = useState<string>('');
   const [markdownContent, setMarkdownContent] = useState<string>('');
@@ -17,12 +17,6 @@ const Page: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect(`/api/auth/signin?callbackUrl=/project-descriptions/add`);
-    },
-  });
 
   useEffect(() => {
     const fetchPortfolioItems = async (): Promise<void> => {
@@ -231,6 +225,34 @@ Describe your project here...
         </div>
       </Container>
     </div>
+  );
+};
+
+const Page: React.FC = () => {
+  useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect(`/api/auth/signin?callbackUrl=/project-descriptions/add`);
+    },
+  });
+
+  return (
+    <Suspense
+      fallback={
+        <div className="page">
+          <Container>
+            <div className="flex space-x-2 justify-center items-center">
+              <span className="sr-only">Loading...</span>
+              <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+              <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+              <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
+            </div>
+          </Container>
+        </div>
+      }
+    >
+      <AddProjectDescriptionForm />
+    </Suspense>
   );
 };
 

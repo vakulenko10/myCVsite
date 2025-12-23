@@ -4,3 +4,4 @@ export const sectionsLinks: SectionName[] = ['welcome', 'aboutMe', 'myPortfolio'
 
 
 
+
