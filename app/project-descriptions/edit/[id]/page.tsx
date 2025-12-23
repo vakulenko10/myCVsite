@@ -18,10 +18,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const [projectDescription, setProjectDescription] = useState<ProjectDescriptionType | null>(null);
   const [portfolioItems, setPortfolioItems] = useState<MyPortfolioItemType[]>([]);
   const [selectedPortfolioId, setSelectedPortfolioId] = useState<string>('');
-  const [markdownContent, setMarkdownContent] = useState<string>('');
+  const [enMarkdownContent, setEnMarkdownContent] = useState<string>('');
+  const [uaMarkdownContent, setUaMarkdownContent] = useState<string>('');
+  const [plMarkdownContent, setPlMarkdownContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'split' | 'editor' | 'preview'>('split');
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'ua' | 'pl'>('en');
   const router = useRouter();
 
   useSession({
@@ -43,7 +46,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
         const description = descData.data;
         setProjectDescription(description);
         setSelectedPortfolioId(description.portfolioItemId);
-        setMarkdownContent(description.markdownContent || '');
+        setEnMarkdownContent(description.enMarkdownContent || '');
+        setUaMarkdownContent(description.uaMarkdownContent || '');
+        setPlMarkdownContent(description.plMarkdownContent || '');
 
         // Fetch portfolio items
         const portfolioRes = await fetch('/api/fetchContentFromDB/myPortfolio');
@@ -62,11 +67,38 @@ const Page: React.FC<PageProps> = ({ params }) => {
     fetchData();
   }, [params.id]);
 
+  const getCurrentContent = (): string => {
+    switch (activeLanguage) {
+      case 'en':
+        return enMarkdownContent;
+      case 'ua':
+        return uaMarkdownContent;
+      case 'pl':
+        return plMarkdownContent;
+      default:
+        return '';
+    }
+  };
+
+  const setCurrentContent = (value: string): void => {
+    switch (activeLanguage) {
+      case 'en':
+        setEnMarkdownContent(value);
+        break;
+      case 'ua':
+        setUaMarkdownContent(value);
+        break;
+      case 'pl':
+        setPlMarkdownContent(value);
+        break;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     
-    if (!selectedPortfolioId || !markdownContent.trim()) {
-      alert('Please select a portfolio item and enter markdown content');
+    if (!selectedPortfolioId) {
+      alert('Please select a portfolio item');
       return;
     }
 
@@ -80,7 +112,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
         },
         body: JSON.stringify({
           portfolioItemId: selectedPortfolioId,
-          markdownContent: markdownContent.trim(),
+          enMarkdownContent: enMarkdownContent.trim(),
+          uaMarkdownContent: uaMarkdownContent.trim(),
+          plMarkdownContent: plMarkdownContent.trim(),
         }),
       });
 
@@ -101,8 +135,8 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
   if (loading) {
     return (
-      <div className="page">
-        <Container>
+      <main className="page pt-[100px] z-0">
+        <Container className={'px-3 md:px-1'}>
           <div className="flex space-x-2 justify-center items-center">
             <span className="sr-only">Loading...</span>
             <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -110,24 +144,24 @@ const Page: React.FC<PageProps> = ({ params }) => {
             <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
           </div>
         </Container>
-      </div>
+      </main>
     );
   }
 
   if (!projectDescription) {
     return (
-      <div className="page">
-        <Container>
+      <main className="page pt-[100px] z-0">
+        <Container className={'px-3 md:px-1'}>
           <p className="text-red-600">Project description not found</p>
         </Container>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="page">
-      <Container>
-        <div className="max-w-4xl mx-auto">
+    <main className="page pt-[100px] z-0">
+      <Container className={'px-3 md:px-1'}>
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-sky-900 mb-6">Edit Project Description</h1>
 
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
@@ -145,16 +179,55 @@ const Page: React.FC<PageProps> = ({ params }) => {
                 <option value="">-- Select a portfolio item --</option>
                 {portfolioItems.map((item) => (
                   <option key={item._id} value={item._id}>
-                    {item.enTitle || item.uaTitle || item.plTitle || 'Untitled Project'} ({item._id})
+                    {item.enTitle || item.uaTitle || item.plTitle || 'Untitled Project'}
                   </option>
                 ))}
               </select>
             </div>
 
+            {/* Language Tabs */}
+            <div className="mb-4 border-b border-gray-200">
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('en')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'en'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('ua')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'ua'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Українська
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('pl')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'pl'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Polski
+                </button>
+              </div>
+            </div>
+
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <label htmlFor="markdownContent" className="block text-sm font-medium text-gray-700">
-                  Markdown Content *
+                  Markdown Content ({activeLanguage.toUpperCase()}) *
                 </label>
                 <div className="flex gap-2">
                   <button
@@ -215,25 +288,24 @@ const Page: React.FC<PageProps> = ({ params }) => {
                   <div>
                     <textarea
                       id="markdownContent"
-                      value={markdownContent}
-                      onChange={(e) => setMarkdownContent(e.target.value)}
+                      value={getCurrentContent()}
+                      onChange={(e) => setCurrentContent(e.target.value)}
                       rows={20}
                       className="w-full p-4 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500 resize-y min-h-[500px]"
                       placeholder="# My Project
 
 ## Overview
 Describe your project here..."
-                      required
                     />
                     <div className="mt-2 text-xs text-gray-500">
-                      Characters: {markdownContent.length}
+                      Characters: {getCurrentContent().length}
                     </div>
                   </div>
                 )}
                 {(viewMode === 'preview' || viewMode === 'split') && (
                   <div>
                     <div className="text-xs text-gray-500 mb-2">Preview:</div>
-                    <MarkdownPreview content={markdownContent} />
+                    <MarkdownPreview content={getCurrentContent()} />
                   </div>
                 )}
               </div>
@@ -258,9 +330,8 @@ Describe your project here..."
           </form>
         </div>
       </Container>
-    </div>
+    </main>
   );
 };
 
 export default Page;
-

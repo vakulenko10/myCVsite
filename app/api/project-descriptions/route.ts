@@ -42,15 +42,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await connectMongoDB();
 
     const body = await request.json();
-    const { portfolioItemId, markdownContent } = body;
+    const { portfolioItemId, enMarkdownContent, uaMarkdownContent, plMarkdownContent } = body;
 
     // Validation
-    if (!portfolioItemId || !markdownContent) {
+    if (!portfolioItemId) {
       return NextResponse.json(
         {
           success: false,
           error: 'Missing required fields',
-          message: 'portfolioItemId and markdownContent are required',
+          message: 'portfolioItemId is required',
         },
         { status: 400 }
       );
@@ -84,7 +84,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Create new project description
     const projectDescription = await ProjectDescription.create({
       portfolioItemId,
-      markdownContent,
+      enMarkdownContent,
+      uaMarkdownContent,
+      plMarkdownContent,
     });
 
     return NextResponse.json(

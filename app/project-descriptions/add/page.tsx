@@ -11,12 +11,14 @@ import { useRouter } from 'next/navigation';
 const AddProjectDescriptionForm: React.FC = () => {
   const [portfolioItems, setPortfolioItems] = useState<MyPortfolioItemType[]>([]);
   const [selectedPortfolioId, setSelectedPortfolioId] = useState<string>('');
-  const [markdownContent, setMarkdownContent] = useState<string>('');
+  const [enMarkdownContent, setEnMarkdownContent] = useState<string>('');
+  const [uaMarkdownContent, setUaMarkdownContent] = useState<string>('');
+  const [plMarkdownContent, setPlMarkdownContent] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'split' | 'editor' | 'preview'>('split');
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'ua' | 'pl'>('en');
   const searchParams = useSearchParams();
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchPortfolioItems = async (): Promise<void> => {
@@ -41,11 +43,38 @@ const AddProjectDescriptionForm: React.FC = () => {
     fetchPortfolioItems();
   }, [searchParams]);
 
+  const getCurrentContent = (): string => {
+    switch (activeLanguage) {
+      case 'en':
+        return enMarkdownContent;
+      case 'ua':
+        return uaMarkdownContent;
+      case 'pl':
+        return plMarkdownContent;
+      default:
+        return '';
+    }
+  };
+
+  const setCurrentContent = (value: string): void => {
+    switch (activeLanguage) {
+      case 'en':
+        setEnMarkdownContent(value);
+        break;
+      case 'ua':
+        setUaMarkdownContent(value);
+        break;
+      case 'pl':
+        setPlMarkdownContent(value);
+        break;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     
-    if (!selectedPortfolioId || !markdownContent.trim()) {
-      alert('Please select a portfolio item and enter markdown content');
+    if (!selectedPortfolioId) {
+      alert('Please select a portfolio item');
       return;
     }
 
@@ -59,7 +88,9 @@ const AddProjectDescriptionForm: React.FC = () => {
         },
         body: JSON.stringify({
           portfolioItemId: selectedPortfolioId,
-          markdownContent: markdownContent.trim(),
+          enMarkdownContent: enMarkdownContent.trim(),
+          uaMarkdownContent: uaMarkdownContent.trim(),
+          plMarkdownContent: plMarkdownContent.trim(),
         }),
       });
 
@@ -79,9 +110,9 @@ const AddProjectDescriptionForm: React.FC = () => {
   };
 
   return (
-    <div className="page">
-      <Container>
-        <div className="max-w-4xl mx-auto">
+    <main className="page pt-[100px] z-0">
+      <Container className={'px-3 md:px-1'}>
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-sky-900 mb-6">Add Project Description</h1>
 
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
@@ -99,16 +130,55 @@ const AddProjectDescriptionForm: React.FC = () => {
                 <option value="">-- Select a portfolio item --</option>
                 {portfolioItems.map((item) => (
                   <option key={item._id} value={item._id}>
-                    {item.enTitle || item.uaTitle || item.plTitle || 'Untitled Project'} ({item._id})
+                    {item.enTitle || item.uaTitle || item.plTitle || 'Untitled Project'}
                   </option>
                 ))}
               </select>
             </div>
 
+            {/* Language Tabs */}
+            <div className="mb-4 border-b border-gray-200">
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('en')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'en'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('ua')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'ua'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Українська
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveLanguage('pl')}
+                  className={`px-4 py-2 font-medium text-sm rounded-t-lg ${
+                    activeLanguage === 'pl'
+                      ? 'bg-sky-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Polski
+                </button>
+              </div>
+            </div>
+
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <label htmlFor="markdownContent" className="block text-sm font-medium text-gray-700">
-                  Markdown Content *
+                  Markdown Content ({activeLanguage.toUpperCase()}) *
                 </label>
                 <div className="flex gap-2">
                   <button
@@ -169,8 +239,8 @@ const AddProjectDescriptionForm: React.FC = () => {
                   <div>
                     <textarea
                       id="markdownContent"
-                      value={markdownContent}
-                      onChange={(e) => setMarkdownContent(e.target.value)}
+                      value={getCurrentContent()}
+                      onChange={(e) => setCurrentContent(e.target.value)}
                       rows={20}
                       className="w-full p-4 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500 resize-y min-h-[500px]"
                       placeholder="# My Project
@@ -189,17 +259,16 @@ Describe your project here...
 ![Project Screenshot](https://example.com/image.png)
 
 [View Live Demo](https://example.com)"
-                      required
                     />
                     <div className="mt-2 text-xs text-gray-500">
-                      Characters: {markdownContent.length}
+                      Characters: {getCurrentContent().length}
                     </div>
                   </div>
                 )}
                 {(viewMode === 'preview' || viewMode === 'split') && (
                   <div>
                     <div className="text-xs text-gray-500 mb-2">Preview:</div>
-                    <MarkdownPreview content={markdownContent} />
+                    <MarkdownPreview content={getCurrentContent()} />
                   </div>
                 )}
               </div>
@@ -224,7 +293,7 @@ Describe your project here...
           </form>
         </div>
       </Container>
-    </div>
+    </main>
   );
 };
 
@@ -239,8 +308,8 @@ const Page: React.FC = () => {
   return (
     <Suspense
       fallback={
-        <div className="page">
-          <Container>
+        <main className="page pt-[100px] z-0">
+          <Container className={'px-3 md:px-1'}>
             <div className="flex space-x-2 justify-center items-center">
               <span className="sr-only">Loading...</span>
               <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -248,7 +317,7 @@ const Page: React.FC = () => {
               <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
             </div>
           </Container>
-        </div>
+        </main>
       }
     >
       <AddProjectDescriptionForm />
@@ -257,4 +326,3 @@ const Page: React.FC = () => {
 };
 
 export default Page;
-

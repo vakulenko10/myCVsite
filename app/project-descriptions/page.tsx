@@ -74,8 +74,8 @@ const Page: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="page">
-        <Container>
+      <main className="page pt-[100px] z-0">
+        <Container className={'px-3 md:px-1'}>
           <div className="flex space-x-2 justify-center items-center">
             <span className="sr-only">Loading...</span>
             <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -83,13 +83,13 @@ const Page: React.FC = () => {
             <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
           </div>
         </Container>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="page">
-      <Container>
+    <main className="page pt-[100px] z-0">
+      <Container className={'px-3 md:px-1'}>
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-sky-900 mb-4">Project Descriptions</h1>
           <Link
@@ -116,17 +116,24 @@ const Page: React.FC = () => {
                       <h3 className="text-xl font-semibold text-sky-900 mb-2">
                         {item.enTitle || item.uaTitle || item.plTitle || 'Untitled Project'}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-2">
-                        ID: {item._id}
-                      </p>
                       {description ? (
                         <div className="mt-4">
                           <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
                             Has Description
                           </span>
-                          <p className="text-gray-700 mt-2 text-sm line-clamp-3">
-                            {description.markdownContent.substring(0, 150)}...
-                          </p>
+                          {(description.enMarkdownContent ||
+                            description.uaMarkdownContent ||
+                            description.plMarkdownContent) && (
+                            <p className="text-gray-700 mt-2 text-sm line-clamp-3">
+                              {(
+                                description.enMarkdownContent ||
+                                description.uaMarkdownContent ||
+                                description.plMarkdownContent ||
+                                ''
+                              ).substring(0, 150)}
+                              ...
+                            </p>
+                          )}
                           <div className="mt-4 flex gap-2">
                             <Link
                               href={`/project-descriptions/edit/${description._id}`}
@@ -163,7 +170,7 @@ const Page: React.FC = () => {
           )}
         </div>
       </Container>
-    </div>
+    </main>
   );
 };
 

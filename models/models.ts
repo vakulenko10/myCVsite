@@ -107,9 +107,14 @@ const projectDescriptionSchema = new Schema<ProjectDescriptionDocument>(
       required: true,
       index: true, // Index for faster lookups
     },
-    markdownContent: {
+    enMarkdownContent: {
       type: String,
-      required: true,
+    },
+    uaMarkdownContent: {
+      type: String,
+    },
+    plMarkdownContent: {
+      type: String,
     },
   },
   {

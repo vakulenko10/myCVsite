@@ -91,7 +91,9 @@ export interface SkillItemType {
 export interface ProjectDescriptionType {
   _id?: string;
   portfolioItemId: string; // Reference to MyPortfolioItem
-  markdownContent: string; // Rich markdown content (supports images, links, formatting)
+  enMarkdownContent?: string; // English markdown content
+  uaMarkdownContent?: string; // Ukrainian markdown content
+  plMarkdownContent?: string; // Polish markdown content
   createdAt?: Date;
   updatedAt?: Date;
 }

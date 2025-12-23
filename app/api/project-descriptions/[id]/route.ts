@@ -87,10 +87,15 @@ export async function PUT(request: NextRequest, { params }: RouteContext): Promi
     await connectMongoDB();
 
     const body = await request.json();
-    const { portfolioItemId, markdownContent } = body;
+    const { portfolioItemId, enMarkdownContent, uaMarkdownContent, plMarkdownContent } = body;
 
     // Build update object with only provided fields
-    const updateData: { portfolioItemId?: string; markdownContent?: string } = {};
+    const updateData: {
+      portfolioItemId?: string;
+      enMarkdownContent?: string;
+      uaMarkdownContent?: string;
+      plMarkdownContent?: string;
+    } = {};
     if (portfolioItemId !== undefined) {
       if (!mongoose.Types.ObjectId.isValid(portfolioItemId)) {
         return NextResponse.json(
@@ -104,8 +109,14 @@ export async function PUT(request: NextRequest, { params }: RouteContext): Promi
       }
       updateData.portfolioItemId = portfolioItemId;
     }
-    if (markdownContent !== undefined) {
-      updateData.markdownContent = markdownContent;
+    if (enMarkdownContent !== undefined) {
+      updateData.enMarkdownContent = enMarkdownContent;
+    }
+    if (uaMarkdownContent !== undefined) {
+      updateData.uaMarkdownContent = uaMarkdownContent;
+    }
+    if (plMarkdownContent !== undefined) {
+      updateData.plMarkdownContent = plMarkdownContent;
     }
 
     // Check if at least one field is provided
@@ -114,7 +125,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext): Promi
         {
           success: false,
           error: 'No fields to update',
-          message: 'At least one field (portfolioItemId or markdownContent) must be provided',
+          message: 'At least one field must be provided',
         },
         { status: 400 }
       );
