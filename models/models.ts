@@ -5,6 +5,7 @@ import type {
   MyPortfolioItemType,
   MyNewsItemType,
   SkillItemType,
+  ProjectDescriptionType,
 } from '@/types';
 
 // HelloItem Schema
@@ -94,6 +95,28 @@ const skillsItemSchema = new Schema<SkillItemDocument>(
   }
 );
 
+// ProjectDescription Schema
+interface ProjectDescriptionDocument
+  extends Omit<ProjectDescriptionType, '_id' | 'createdAt' | 'updatedAt'>,
+    Document {}
+
+const projectDescriptionSchema = new Schema<ProjectDescriptionDocument>(
+  {
+    portfolioItemId: {
+      type: String,
+      required: true,
+      index: true, // Index for faster lookups
+    },
+    markdownContent: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 // Models
 const SkillItem: Model<SkillItemDocument> =
   mongoose.models.SkillItem || mongoose.model<SkillItemDocument>('SkillItem', skillsItemSchema);
@@ -112,6 +135,10 @@ const MyPortfolioItem: Model<MyPortfolioItemDocument> =
 const MyNewsItem: Model<MyNewsItemDocument> =
   mongoose.models.MyNewsItem || mongoose.model<MyNewsItemDocument>('MyNewsItem', myNewsItemSchema);
 
-export { SkillItem, HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem };
+const ProjectDescription: Model<ProjectDescriptionDocument> =
+  mongoose.models.ProjectDescription ||
+  mongoose.model<ProjectDescriptionDocument>('ProjectDescription', projectDescriptionSchema);
+
+export { SkillItem, HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem, ProjectDescription };
 
 

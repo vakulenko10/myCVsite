@@ -91,6 +91,17 @@ const LinksContainer: React.FC<LinksContainerProps> = ({
         ))}
         <Link
           onClick={() => setIsSmallHeaderActive(false)}
+          href={`/project-descriptions`}
+          className={`transition duration-200 ease-linear ${
+            isSmallHeaderActive
+              ? `md:bg-transparent p-5 hover:bg-white md:hover:bg-transparent md:hover:text-[#00000080] md:p-0 `
+              : `md:hover:text-[#00000080]`
+          }`}
+        >
+          Project Descriptions
+        </Link>
+        <Link
+          onClick={() => setIsSmallHeaderActive(false)}
           href={`/api/auth/signout?callbackUrl=/`}
           className={`transition duration-200 ease-linear ${
             isSmallHeaderActive
@@ -106,5 +117,6 @@ const LinksContainer: React.FC<LinksContainerProps> = ({
 };
 
 export default LinksContainer;
+
 
 

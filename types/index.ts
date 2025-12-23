@@ -88,6 +88,14 @@ export interface SkillItemType {
   updatedAt?: Date;
 }
 
+export interface ProjectDescriptionType {
+  _id?: string;
+  portfolioItemId: string; // Reference to MyPortfolioItem
+  markdownContent: string; // Rich markdown content (supports images, links, formatting)
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export type SectionItemType =
   | HelloItemType
   | AboutMeItemType
@@ -131,5 +139,6 @@ export interface DynamicFormProps {
   initialData?: Record<string, unknown>;
   onSubmit: (data: Record<string, unknown>) => Promise<void>;
 }
+
 
 

@@ -41,3 +41,4 @@ export const fetchPhotos = async (sectionName: string): Promise<CloudinaryResour
 };
 
 
+
