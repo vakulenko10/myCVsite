@@ -11,15 +11,17 @@ interface SectionItemProps {
 }
 
 const SectionItem: React.FC<SectionItemProps> = ({ item, sectionName, handleDelete }) => {
+  const imageURL = 'imageURL' in item ? (item as { imageURL?: string }).imageURL : undefined;
+  const hasImage = Boolean(imageURL);
   return (
     <div className="SectionItem relative flex max-w-[90%] min-w-[250px] h-[600px] md:justify-self-center md:max-w-[370px] md:h-[500px] overflow-hidden flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md lg:max-w-[330px]">
       <div
         className={`imageContainer relative mx-4 mt-4 overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700 ${
-          item?.imageURL ? 'h-1/2' : 'imageContainer relative h-fit p-3'
+          hasImage ? 'h-1/2' : 'imageContainer relative h-fit p-3'
         }`}
       >
-        {item?.imageURL ? (
-          <img className="h-full w-full object-cover" src={item.imageURL} alt="Section item" />
+        {hasImage && imageURL ? (
+          <img className="h-full w-full object-cover" src={imageURL} alt="Section item" />
         ) : (
           <div>click to show the buttons</div>
         )}
@@ -44,7 +46,7 @@ const SectionItem: React.FC<SectionItemProps> = ({ item, sectionName, handleDele
 
       <div
         className={`itemInfo p-6 overflow-y-scroll overflow-x-hidden ${
-          item?.imageURL ? 'h-1/2' : 'h-full'
+          hasImage ? 'h-1/2' : 'h-full'
         }`}
       >
         {Object.entries(item).map(

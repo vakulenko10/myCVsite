@@ -9,6 +9,15 @@ export const sectionsLinks: SectionName[] = [
   'askmequestions',
 ];
 
+export const sectionDisplayNames: Record<SectionName, string> = {
+  welcome: 'Welcome',
+  aboutMe: 'About Me',
+  myPortfolio: 'My Portfolio',
+  skills: 'Skills',
+  someNews: 'Some News',
+  askmequestions: 'Ask me questions',
+};
+
 
 
 

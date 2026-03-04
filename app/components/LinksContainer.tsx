@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { sectionsLinks } from './mainvars';
+import { sectionsLinks, sectionDisplayNames } from './mainvars';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import type { SectionName } from '@/types';
@@ -79,14 +79,14 @@ const LinksContainer: React.FC<LinksContainerProps> = ({
           <Link
             key={index}
             onClick={() => setIsSmallHeaderActive(false)}
-            href={`/section/${link}`}
+            href={link === 'askmequestions' ? '/askmequestions' : `/section/${link}`}
             className={`transition duration-200 ease-linear ${
               isSmallHeaderActive
                 ? `md:bg-transparent p-5 hover:bg-white md:hover:bg-transparent md:hover:text-[#00000080] md:p-0 `
                 : `md:hover:text-[#00000080]`
             }`}
           >
-            {link}
+            {sectionDisplayNames[link]}
           </Link>
         ))}
         <Link
