@@ -88,6 +88,17 @@ export interface SkillItemType {
   updatedAt?: Date;
 }
 
+export interface AskMeQuestionType {
+  _id?: string;
+  enText: string;
+  uaText: string;
+  plText: string;
+  autoSend?: boolean;
+  order?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface ProjectDescriptionType {
   _id?: string;
   portfolioItemId: string; // Reference to MyPortfolioItem
@@ -103,9 +114,16 @@ export type SectionItemType =
   | AboutMeItemType
   | MyPortfolioItemType
   | MyNewsItemType
-  | SkillItemType;
+  | SkillItemType
+  | AskMeQuestionType;
 
-export type SectionName = 'welcome' | 'aboutMe' | 'myPortfolio' | 'skills' | 'someNews';
+export type SectionName =
+  | 'welcome'
+  | 'aboutMe'
+  | 'myPortfolio'
+  | 'skills'
+  | 'someNews'
+  | 'askmequestions';
 
 // Component prop types
 export interface ContainerProps {

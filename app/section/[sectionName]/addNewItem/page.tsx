@@ -2,6 +2,7 @@
 
 import Container from '@/app/components/Container';
 import DynamicForm from '@/app/components/DynamicForm';
+import AskMeQuestionForm from '@/app/components/AskMeQuestionForm';
 import GetImagesFromFolder from '@/app/components/GetImagesFromCloudinary';
 import { ImageProvider } from '@/app/components/ImageURLContext';
 import React from 'react';
@@ -14,15 +15,22 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ params }) => {
-  console.log('params:', params);
+  const isAskMeQuestions = params.sectionName === 'askmequestions';
+
   return (
     <div className="page">
       <ImageProvider>
         <Container>
           <h1>add item to section: {params.sectionName}</h1>
           <Container className="flex flex-col justify-center items-center md:flex md:flex-row md:flex-wrap md:justify-around">
-            <DynamicForm sectionName={params.sectionName} />
-            <GetImagesFromFolder sectionName={params.sectionName} />
+            {isAskMeQuestions ? (
+              <AskMeQuestionForm sectionName={params.sectionName} />
+            ) : (
+              <>
+                <DynamicForm sectionName={params.sectionName} />
+                <GetImagesFromFolder sectionName={params.sectionName} />
+              </>
+            )}
           </Container>
         </Container>
       </ImageProvider>

@@ -2,10 +2,11 @@
 
 import Container from '@/app/components/Container';
 import DynamicForm from '@/app/components/DynamicForm';
+import AskMeQuestionForm from '@/app/components/AskMeQuestionForm';
 import GetImagesFromFolder from '@/app/components/GetImagesFromCloudinary';
 import { ImageProvider } from '@/app/components/ImageURLContext';
 import React, { useEffect, useState } from 'react';
-import type { SectionName, SectionItemType } from '@/types';
+import type { SectionName, SectionItemType, AskMeQuestionType } from '@/types';
 
 interface PageProps {
   params: {
@@ -16,7 +17,7 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const [contentItem, setContentItem] = useState<SectionItemType | null>(null);
-  console.log('params:', params);
+  const isAskMeQuestions = params.sectionName === 'askmequestions';
 
   useEffect(() => {
     const getContentById = async (): Promise<void> => {
@@ -27,8 +28,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
           throw new Error(`Failed to fetch content: ${res.status} ${res.statusText}`);
         }
         const data = await res.json();
-        console.log('Data:', data);
-        console.log('Content:', data.contentItem);
         setContentItem(data.contentItem);
       } catch (error) {
         console.error('Error loading content: ', error);
@@ -42,8 +41,17 @@ const Page: React.FC<PageProps> = ({ params }) => {
     <div className="page">
       <ImageProvider>
         <Container className="flex flex-col justify-center items-center md:flex md:flex-row md:flex-wrap md:justify-around">
-          <DynamicForm sectionName={params.sectionName} initialData={contentItem || undefined} />
-          <GetImagesFromFolder sectionName={params.sectionName} />
+          {isAskMeQuestions ? (
+            <AskMeQuestionForm
+              sectionName={params.sectionName}
+              initialData={(contentItem as AskMeQuestionType) || undefined}
+            />
+          ) : (
+            <>
+              <DynamicForm sectionName={params.sectionName} initialData={contentItem || undefined} />
+              <GetImagesFromFolder sectionName={params.sectionName} />
+            </>
+          )}
         </Container>
       </ImageProvider>
     </div>

@@ -5,6 +5,7 @@ import type {
   MyPortfolioItemType,
   MyNewsItemType,
   SkillItemType,
+  AskMeQuestionType,
   ProjectDescriptionType,
 } from '@/types';
 
@@ -95,6 +96,25 @@ const skillsItemSchema = new Schema<SkillItemDocument>(
   }
 );
 
+// AskMeQuestion Schema (predefined chat questions for "Ask me anything")
+interface AskMeQuestionDocument
+  extends Omit<AskMeQuestionType, '_id' | 'createdAt' | 'updatedAt'>,
+    Document {}
+
+const askMeQuestionSchema = new Schema<AskMeQuestionDocument>(
+  {
+    enText: { type: String, required: true },
+    uaText: { type: String, required: true },
+    plText: { type: String, required: true },
+    autoSend: { type: Boolean, default: false },
+    order: { type: Number, default: 0 },
+  },
+  {
+    timestamps: true,
+    collection: 'askmequestions',
+  }
+);
+
 // ProjectDescription Schema
 interface ProjectDescriptionDocument
   extends Omit<ProjectDescriptionType, '_id' | 'createdAt' | 'updatedAt'>,
@@ -144,6 +164,18 @@ const ProjectDescription: Model<ProjectDescriptionDocument> =
   mongoose.models.ProjectDescription ||
   mongoose.model<ProjectDescriptionDocument>('ProjectDescription', projectDescriptionSchema);
 
-export { SkillItem, HelloItem, AboutMeItem, MyPortfolioItem, MyNewsItem, ProjectDescription };
+const AskMeQuestion: Model<AskMeQuestionDocument> =
+  mongoose.models.AskMeQuestion ||
+  mongoose.model<AskMeQuestionDocument>('AskMeQuestion', askMeQuestionSchema);
+
+export {
+  SkillItem,
+  HelloItem,
+  AboutMeItem,
+  MyPortfolioItem,
+  MyNewsItem,
+  ProjectDescription,
+  AskMeQuestion,
+};
 
 

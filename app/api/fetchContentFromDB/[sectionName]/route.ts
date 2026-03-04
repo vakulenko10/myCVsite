@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectMongoDB from '@/libs/mongo_db';
-import { sectionToModelMap, getModelProperties } from '@/libs/sectionUtils';
+import { sectionToModelMap, getModelProperties, getSortForSection } from '@/libs/sectionUtils';
 import mongoose from 'mongoose';
 import type { SectionName } from '@/types';
 
@@ -27,7 +27,8 @@ export async function GET(_req: NextRequest, { params }: RouteContext): Promise<
       return NextResponse.json({ message: 'Invalid sectionName' }, { status: 400 });
     }
     const modelProperties = getModelProperties(params.sectionName);
-    const contentItems = await model.find();
+    const sort = getSortForSection(params.sectionName) ?? {};
+    const contentItems = await model.find().sort(sort);
     console.log('Content items:', contentItems);
 
     return NextResponse.json({ contentItems, modelProperties }, { status: 200 });

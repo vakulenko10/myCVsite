@@ -1,7 +1,7 @@
 export { default } from 'next-auth/middleware';
 
 export const config = {
-  matcher: ['/api/fetchContentFromDB/:path*'],
+  matcher: ['/api/fetchContentFromDB/:path*', '/api/askmequestions/:path*'],
 };
 
 
